@@ -5,7 +5,7 @@ import VideoPlayer from "./components/VideoPlayer/VideoPlayer";
 function App() {
     return (
         <div className="app">
-            <header className="app-header">Hachathon MTC</header>
+            <header className="app-header">Hackathon MTC</header>
             <main className="app-main">
                 <VideoPlayer></VideoPlayer>
             </main>

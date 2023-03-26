@@ -1,78 +1,40 @@
-create table kafka
+create table films
 (
-    id      int,
-    message varchar(300)
+    id   serial primary key,
+    file varchar(300)
 );
 
-create table kafkainfo
+create table film_info
 (
-    code_id  int primary key,
-    algotype varchar(30),
-    algoA    int,
-    algoB    int,
-    value    varchar(50),
-    time     timestamp
+    id      serial primary key,
+    film_id int,
+    type    int,
+    value   varchar(50),
+    time    timestamp
 );
 
-create table type
-(
-    typename_id int primary key,
-    typename    varchar(30)
-);
-insert into type (typename_id, typename)
-values (1, 'Температура нагрева');
-insert into type (typename_id, typename)
-values (2, 'Вибрация');
 
-create table podtype
+create table info_type
 (
-    podtype_id int primary key,
-    typename   varchar(30)
+    id   serial primary key,
+    name varchar(30)
 );
-insert into podtype (podtype_id, typename)
-values (1, 'Температура');
-insert into podtype (podtype_id, typename)
-values (2, 'Уставки');
-insert into podtype (podtype_id, typename)
-values (3, 'Осевая');
-insert into podtype (podtype_id, typename)
-values (4, 'Горизонтальная');
-insert into podtype (podtype_id, typename)
-values (5, 'Вертикальная');
 
-create table signal
+create table film_alt
 (
-    signal_id int primary key,
-    typename  varchar(30)
+    id      serial primary key,
+    film_id int,
+    type    int,
+    file    varchar(300)
 );
-insert into signal (signal_id, typename)
-values (1, 'temperature');
-insert into signal (signal_id, typename)
-values (2, 'alarm_max');
-insert into signal (signal_id, typename)
-values (3, 'alarm_min');
-insert into signal (signal_id, typename)
-values (4, 'warning_max');
-insert into signal (signal_id, typename)
-values (5, 'warning_min');
-insert into signal (signal_id, typename)
-values (6, 'vibration_horizontal');
-insert into signal (signal_id, typename)
-values (7, 'vibration_vertical');
 
-create table info
+create table alt_type
 (
-    id          int,
-    code_id     int,
-    bearing     int,
-    typename_id int,
-    podtype_id  int,
-    signal_id   int,
-    analog      boolean,
-    activity    boolean,
-    exgauster   int,
-    FOREIGN KEY (typename_id) REFERENCES type (typename_id),
-    FOREIGN KEY (podtype_id) REFERENCES podtype (podtype_id),
-    FOREIGN KEY (signal_id) REFERENCES signal (signal_id),
-    FOREIGN KEY (code_id) REFERENCES kafkainfo (code_id)
+    id   serial primary key,
+    name varchar(30)
 );
+
+insert into films (file)
+values ('4th-of-july-fireworks-4k.mp4'),
+       ('0082_ballsfallingfromsky.mov'),
+       ('mixkit-colored-lights-of-cars-in-a-video-out-of-focus-44696-medium.mp4');

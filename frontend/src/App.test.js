@@ -3,6 +3,6 @@ import App from "./App";
 
 test("main header", () => {
     render(<App />);
-    const linkElement = screen.getByText(/hachathon mtc/i);
+    const linkElement = screen.getByText(/hackathon mtc/i);
     expect(linkElement).toBeInTheDocument();
 });

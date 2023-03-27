@@ -2,8 +2,8 @@
 /* Custom properties   */
 /* ------------------- */
 :root {
-    --clr-white: hsl(0, 0%, 100%);
-    --clr-dark: hsl(220, 13%, 18%);
+    --clr-white: hsl(0, 0%, 91%);
+    --clr-dark: hsl(0, 0%, 18%);
 
     --ff-general: sans-serif;
 }

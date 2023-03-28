@@ -1,54 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "./VideoPlayer.css";
+import ViewSettings from "../ViewSettings/ViewSettings";
+import PlayButton from "../PlayButton/PlayButton";
+import FullScreenButton from "../FullScreenButton/FullScreenButton";
+import ViewSettingsPanel from "../ViewSettingsPanel/ViewSettingsPanel";
+import { useDispatch, useSelector } from "react-redux";
+import { setVideoSrc } from "../../store/reducers/VideoPlayerSlice";
 
 const VideoPlayer = () => {
-    const [togglePlay, setTogglePlay] = useState();
-    const [toggleFullScreen, setToggleFullScreen] = useState();
-    const [toggleViewSettings, setToggleViewSettings] = useState();
-    const [urlVideo, setUrlVideo] = useState();
+    const dispatch = useDispatch();
+    const { togglePlay, videoSrc } = useSelector((state) => state.videoPlayerReducer);
 
     useEffect(() => {
-        setUrlVideo("assets/4th-of-july-fireworks-4k.mp4");
+        dispatch(setVideoSrc({ videoSrc: "assets/4th-of-july-fireworks-4k.mp4" }));
     }, []);
 
     const videoRef = useRef(null);
-    useEffect(() => {
-        togglePlay ? videoRef.current.play() : videoRef.current.pause();
-    }, [togglePlay]);
-
     const videoContainerRef = useRef(null);
-    useEffect(() => {
-        if (toggleFullScreen !== undefined) {
-            toggleFullScreen
-                ? videoContainerRef.current.requestFullscreen()
-                : document.exitFullscreen();
-        }
-    }, [toggleFullScreen]);
-
-    useEffect(() => {
-        const handlerKeyDown = (e) => {
-            const tagName = document.activeElement.tagName.toLowerCase();
-
-            if (e.code === "Space") {
-                if (tagName === "button") return;
-                setTogglePlay((togglePlay) => !togglePlay);
-            }
-        };
-        document.addEventListener("keydown", handlerKeyDown);
-
-        return () => {
-            document.removeEventListener("keydown", handlerKeyDown);
-        };
-    });
-
-    const handlerClickViewSettings = () => {
-        setToggleViewSettings((toggleViewSettings) => !toggleViewSettings);
-        setUrlVideo(
-            toggleViewSettings
-                ? "assets/4th-of-july-fireworks-4k.mp4"
-                : "assets/4th-of-july-fireworks-4k-blinking.mp4"
-        );
-    };
 
     return (
         <div
@@ -56,33 +24,20 @@ const VideoPlayer = () => {
             ref={videoContainerRef}
         >
             <div className="video-controls-container">
-                <div className="timeline-container"></div>
+                <ViewSettingsPanel></ViewSettingsPanel>
                 <div className="controls">
-                    <button
-                        className={`controls-button ${
-                            !togglePlay ? "play-button" : "pause-button"
-                        }`}
-                        onClick={() => setTogglePlay((togglePlay) => !togglePlay)}
-                    ></button>
-                    <button
-                        className={`controls-button  ${
-                            !toggleViewSettings
-                                ? "view-settings-button"
-                                : "view-settings-exit-button"
-                        }`}
-                        onClick={handlerClickViewSettings}
-                    ></button>
-                    <button
-                        className={`controls-button ${
-                            !toggleFullScreen ? "full-screen-button" : "full-screen-exit-button"
-                        }`}
-                        onClick={() => setToggleFullScreen((toggleFullScreen) => !toggleFullScreen)}
-                    ></button>
+                    <PlayButton videoRef={videoRef}></PlayButton>
+                    <ViewSettings></ViewSettings>
+                    <FullScreenButton videoContainerRef={videoContainerRef}></FullScreenButton>
+                </div>
+                <div className="timeline-container">
+                    <div className="timeline">
+                        <div className="thumb-indicator"></div>
+                    </div>
                 </div>
             </div>
-            <video ref={videoRef} className="video" src={urlVideo}></video>
+            <video ref={videoRef} className="video" src={videoSrc}></video>
         </div>
     );
 };
-
 export default VideoPlayer;

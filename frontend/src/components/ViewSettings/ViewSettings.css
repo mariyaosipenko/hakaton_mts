@@ -1,0 +1,9 @@
+.view-settings-button {
+    margin-left: auto;
+    background-image: url("../../../public/assets/icons/eye.svg");
+}
+
+.view-settings-exit-button {
+    margin-left: auto;
+    background-image: url("../../../public/assets/icons/eye-fill.svg");
+}

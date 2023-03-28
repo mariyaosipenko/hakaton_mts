@@ -1,0 +1,42 @@
+.settings-panel-container {
+    display: grid;
+    justify-items: start;
+
+    position: absolute;
+    right: 0.5rem;
+    bottom: 3.5rem;
+    background-color: var(--clr-dark);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    z-index: 2000;
+    width: 10rem;
+
+    opacity: 0;
+    transition: opacity 150ms ease-in-out;
+}
+
+.settings-panel-container.showed {
+    opacity: 1;
+}
+
+.settings-panel-header {
+    text-transform: uppercase;
+    color: var(--clr-grey);
+    line-height: 3rem;
+}
+
+.settings-panel-button {
+    text-transform: uppercase;
+    color: var(--clr-white);
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    font-weight: 300;
+    transform: opacity 150ms ease-in-out;
+}
+
+.settings-panel-button:hover,
+.settings-panel-button:focus-within {
+    cursor: pointer;
+    font-weight: 500;
+}

@@ -1,0 +1,7 @@
+.play-button {
+    background-image: url("../../../public/assets/icons/play-small.svg");
+}
+
+.pause-button {
+    background-image: url("../../../public/assets/icons/pause.svg");
+}

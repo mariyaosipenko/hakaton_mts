@@ -4,6 +4,12 @@ import "./VideoPlayer.css";
 const VideoPlayer = () => {
     const [togglePlay, setTogglePlay] = useState();
     const [toggleFullScreen, setToggleFullScreen] = useState();
+    const [toggleViewSettings, setToggleViewSettings] = useState();
+    const [urlVideo, setUrlVideo] = useState();
+
+    useEffect(() => {
+        setUrlVideo("assets/4th-of-july-fireworks-4k.mp4");
+    }, []);
 
     const videoRef = useRef(null);
     useEffect(() => {
@@ -35,6 +41,15 @@ const VideoPlayer = () => {
         };
     });
 
+    const handlerClickViewSettings = () => {
+        setToggleViewSettings((toggleViewSettings) => !toggleViewSettings);
+        setUrlVideo(
+            toggleViewSettings
+                ? "assets/4th-of-july-fireworks-4k.mp4"
+                : "assets/4th-of-july-fireworks-4k-blinking.mp4"
+        );
+    };
+
     return (
         <div
             className={`video-container ${togglePlay ? "played" : "paused"}`}
@@ -50,6 +65,14 @@ const VideoPlayer = () => {
                         onClick={() => setTogglePlay((togglePlay) => !togglePlay)}
                     ></button>
                     <button
+                        className={`controls-button  ${
+                            !toggleViewSettings
+                                ? "view-settings-button"
+                                : "view-settings-exit-button"
+                        }`}
+                        onClick={handlerClickViewSettings}
+                    ></button>
+                    <button
                         className={`controls-button ${
                             !toggleFullScreen ? "full-screen-button" : "full-screen-exit-button"
                         }`}
@@ -57,11 +80,7 @@ const VideoPlayer = () => {
                     ></button>
                 </div>
             </div>
-            <video
-                ref={videoRef}
-                className="video"
-                src="assets/4th-of-july-fireworks-4k.mp4"
-            ></video>
+            <video ref={videoRef} className="video" src={urlVideo}></video>
         </div>
     );
 };

@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	//assert "github.com/stretchr/testify/assert"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"io/fs"
-
-	//"io/fs"
 	"io/ioutil"
 	"log"
 	"os/exec"
@@ -25,7 +22,6 @@ func readFileInfo(prefix string) {
 	if prefix == "" {
 		fmt.Println("some troubles")
 	}
-	//films/4th-of-july-fireworks-4k.mp4
 	files, err := ioutil.ReadDir(direct)
 
 	if err != nil {
@@ -39,15 +35,14 @@ func readFileInfo(prefix string) {
 	for _, file := range files {
 		if strings.Contains(file.Name(), prefix) {
 			fmt.Println(file.Name(), file.IsDir())
-			convert2gif(file.Name())
-			//prepare(file, 1)
+			//convert2gif(file.Name())
+			prepare(file, 1)
 		}
 	}
-
 }
 
 func convert2gif(fileName string) {
-	cmd := "ffmpeg -i converter/clone.mp4 -vf \"fps=5,scale=320:-1:flags=lanczos\" -c:v pam -f image2pipe - | convert -delay 5 - -loop 0 -layers optimize test.gif"
+	cmd := "ffmpeg -i \"converter\"clone.mp4 -vf \"fps=5,scale=320:-1:flags=lanczos\" -c:v pam -f image2pipe - | convert -delay 5 - -loop 0 -layers optimize test.gif"
 	_, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Failed to execute command: %s", cmd))
@@ -59,7 +54,7 @@ func prepare(file fs.FileInfo, typename int) {
 		fmt.Println("incorrect parameters")
 	}
 	err := ffmpeg.Input(file.Name(), ffmpeg.KwArgs{"ss": 1}).
-		Output(file.Name()+"out", ffmpeg.KwArgs{"t": 1}).OverWriteOutput().Run()
+		Output("out"+file.Name(), ffmpeg.KwArgs{"t": 1}).OverWriteOutput().Run()
 	if err != nil {
 		fmt.Println(err)
 	}

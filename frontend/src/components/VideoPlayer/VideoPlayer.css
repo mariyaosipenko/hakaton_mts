@@ -19,7 +19,7 @@
     opacity: 0;
     transition: opacity 150ms ease-in-out;
     width: 100%;
-    padding: 0.5rem 0.2rem;
+    padding: 0.5rem;
 }
 
 .video-container:hover .video-controls-container,
@@ -31,6 +31,7 @@
 .controls {
     display: flex;
     gap: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .controls-button {
@@ -38,7 +39,7 @@
     opacity: 0.85;
     transform: opacity 150ms ease-in-out;
 
-    width: 1.3rem;
+    width: 1.4rem;
     aspect-ratio: 1;
 
     background-color: transparent;
@@ -53,28 +54,48 @@
     opacity: 1;
 }
 
-.play-button {
-    background-image: url("../../../public/assets/icons/play-small.svg");
+.timeline-container {
+    display: flex;
+    align-items: center;
+    height: 0.5rem;
+    cursor: pointer;
 }
 
-.pause-button {
-    background-image: url("../../../public/assets/icons/pause.svg");
+.timeline {
+    position: relative;
+    background-color: var(--clr-white);
+    height: 0.3rem;
+    width: 100%;
+    border-radius: 0.2rem;
 }
 
-.full-screen-button {
-    background-image: url("../../../public/assets/icons/fullscreen.svg");
+.timeline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: calc(100% - var(--progress-position, 0.25) * 100%);
+    background-color: var(--clr-dark);
 }
 
-.full-screen-exit-button {
-    background-image: url("../../../public/assets/icons/fullscreen-exit.svg");
+.timeline .thumb-indicator {
+    --scale: 0;
+    position: absolute;
+    top: -50%;
+    left: calc(var(--progress-position, 0.25) * 100%);
+    background-color: var(--clr-dark);
+    transform: translateX(-50%) scale(var(--scale));
+    transition: transform 100ms ease-in-out;
+    height: 200%;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
 }
 
-.view-settings-button {
-    margin-left: auto;
-    background-image: url("../../../public/assets/icons/eye.svg");
+.timeline-container:hover .thumb-indicator {
+    --scale: 1;
 }
 
-.view-settings-exit-button {
-    margin-left: auto;
-    background-image: url("../../../public/assets/icons/eye-fill.svg");
+.timeline-container:hover .timeline {
+    height: 100%;
 }

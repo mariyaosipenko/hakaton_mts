@@ -3,6 +3,7 @@
 /* ------------------- */
 :root {
     --clr-white: hsl(0, 0%, 91%);
+    --clr-grey: hsl(0, 0%, 75%);
     --clr-dark: hsl(0, 0%, 18%);
 
     --ff-general: sans-serif;

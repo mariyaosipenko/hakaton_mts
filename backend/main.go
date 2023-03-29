@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"os"
@@ -29,13 +30,15 @@ func main() {
 	defer dbPool.Close()
 
 	log.Println("starting server...")
-	http.HandleFunc("/", signalHandler(dbPool))
-	//	http.HandleFunc("/type", typeHandler(dbPool))
-	//	http.HandleFunc("/podtype", podtypeHandler(dbPool))
+
+	r := mux.NewRouter()
+	r.HandleFunc("/films", filmsHandler(dbPool))
+	r.HandleFunc("/file/{file}", fileHandler())
+	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
-func signalHandler(db *pgxpool.Pool) http.HandlerFunc {
+func filmsHandler(db *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		rows, err := db.Query(context.Background(), "SELECT * FROM films;")
 		if err != nil {
@@ -78,6 +81,43 @@ func signalHandler(db *pgxpool.Pool) http.HandlerFunc {
 		if _, err = w.Write(body); err != nil {
 			log.Printf("failed to write response body")
 		}
+	}
+}
+
+func fileHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		path := "/films/" + vars["file"]
+		if _, err := os.Stat(path); err != nil {
+			if os.IsNotExist(err) {
+				log.Println("error: " + err.Error() + "\nunable to load file at: " + path + "\n")
+			}
+			log.Println("error with file path: " + "\nerror message: " + err.Error() + "\n")
+		}
+		file, err := os.Open(path)
+		if err != nil {
+			log.Printf("Error with path %s: %v", path, err)
+			w.WriteHeader(404)
+			w.Write([]byte("404"))
+		}
+		defer file.Close()
+		l, err := file.Stat()
+		if err != nil {
+			log.Println("error with file stat: " + "\nerror message: " + err.Error() + "\n")
+		}
+		var buffer = make([]byte, int(l.Size()))
+
+		_, err = file.Read(buffer)
+		if err != nil {
+			log.Println("error with writing file: " + "\nerror message: " + err.Error() + "\n")
+		}
+		fmt.Println(buffer)
+
+		file.Seek(0, 0)
+		contentType := http.DetectContentType(buffer)
+		w.Header().Set("Content-type", contentType)
+		w.Write(buffer)
+
 	}
 }
 

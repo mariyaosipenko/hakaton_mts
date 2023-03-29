@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - films:/films
+      - ./films:/films
     networks:
       - hm-network
     environment:

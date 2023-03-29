@@ -58,7 +58,7 @@ services:
     container_name: b2c-ffmpeg
     image: jrottenberg/ffmpeg
     networks:
-      - b2c
+      - hm-network
     ports:
       - "29002:29000"
     tty: true

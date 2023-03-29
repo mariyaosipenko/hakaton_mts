@@ -10,6 +10,10 @@ const ViewSettingsPanel = () => {
         dispatch(setVideoSrc({ videoSrc: "assets/4th-of-july-fireworks-4k-blinking.mp4" }));
     };
 
+    const setRedDetectorVideo = () => {
+        dispatch(setVideoSrc({ videoSrc: "assets/4th-of-july-fireworks-4k-flash-and-red.mp4" }));
+    };
+
     return (
         <div className={`settings-panel-container ${toggleViewSettings ? "showed" : "hided"}`}>
             <p className="settings-panel-header">video</p>
@@ -17,7 +21,9 @@ const ViewSettingsPanel = () => {
                 flicker
             </button>
 
-            <button className="settings-panel-button">red detector</button>
+            <button className="settings-panel-button" onClick={setRedDetectorVideo}>
+                red detector
+            </button>
         </div>
     );
 };

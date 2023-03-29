@@ -24,6 +24,21 @@ services:
     links:
       - backend
 
+  converter:
+    container_name: hm-converter
+    build: ./converter
+    command: go run converter.go
+    ports:
+      - "8002:8002"
+#    volumes:
+#      - convert
+    networks:
+      - hm-network
+    environment:
+      DD_DB_HOST: db
+    depends_on:
+      - db
+
   db:
     container_name: hm-db
     image: postgres:15.2-alpine

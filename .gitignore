@@ -13,3 +13,5 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+/.idea/sqldialects.xml
+/.idea/dataSources.xml

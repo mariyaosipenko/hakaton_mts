@@ -17,6 +17,46 @@ const VideoPlayer = () => {
 
     const videoRef = useRef(null);
     const videoContainerRef = useRef(null);
+    const timelineRef = useRef(null);
+
+    const handlerTimelineUpdate = (e) => {
+        const rect = timelineRef.current.getBoundingClientRect();
+        const percent = Math.min(Math.max(0, e.clientX - rect.x), rect.width) / rect.width;
+        timelineRef.current.style.setProperty("--progress-position", percent);
+        videoRef.current.currentTime = percent * videoRef.current.duration;
+        e.preventDefault();
+    };
+
+    const handlerTimeUpdate = () => {
+        const percent = videoRef.current.currentTime / videoRef.current.duration;
+        timelineRef.current.style.setProperty("--progress-position", percent);
+    };
+
+    useEffect(() => {
+        const handlerKeyDown = (e) => {
+            switch (e.key.toLowerCase()) {
+                case "arrowleft":
+                case "j":
+                    skip(-5);
+                    break;
+
+                case "arrowright":
+                case "l":
+                    skip(5);
+                    break;
+                default:
+                    break;
+            }
+        };
+        document.addEventListener("keydown", handlerKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handlerKeyDown);
+        };
+    });
+
+    function skip(duration) {
+        videoRef.current.currentTime += duration;
+    }
 
     return (
         <div
@@ -30,13 +70,22 @@ const VideoPlayer = () => {
                     <ViewSettings></ViewSettings>
                     <FullScreenButton videoContainerRef={videoContainerRef}></FullScreenButton>
                 </div>
-                <div className="timeline-container">
+                <div
+                    ref={timelineRef}
+                    className="timeline-container"
+                    onMouseUp={handlerTimelineUpdate}
+                >
                     <div className="timeline">
                         <div className="thumb-indicator"></div>
                     </div>
                 </div>
             </div>
-            <video ref={videoRef} className="video" src={videoSrc}></video>
+            <video
+                ref={videoRef}
+                className="video"
+                src={videoSrc}
+                onTimeUpdate={handlerTimeUpdate}
+            ></video>
         </div>
     );
 };
